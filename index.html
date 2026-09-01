@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineTrack | Login e Autenticação</title>
+    <meta name="description" content="Acesse o sistema de catálogo de filmes e gerenciamento com autenticação segura.">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            900: '#7f1d1d'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+    <link rel="stylesheet" href="assets/css/custom.css">
+</head>
+
+<body class="min-h-screen bg-[#0b0f19] flex items-center justify-center p-4 selection:bg-red-500 selection:text-white relative overflow-x-hidden">
+
+    <!-- Elementos visuais de fundo -->
+    <div class="fixed top-[-10%] left-[-10%] w-[45rem] h-[45rem] bg-red-600/15 rounded-full blur-[140px] pointer-events-none z-10"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[45rem] h-[45rem] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none z-10"></div>
+
+    <main class="w-full max-w-md my-8 relative z-20">
+
+        <!-- Cabeçalho -->
+        <header class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-red-600 text-white shadow-xl mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z">
+                    </path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">
+                Cine<span class="text-red-500">Track</span>
+            </h1>
+            <p class="text-sm text-gray-400 mt-1">Plataforma de Gestão de Catálogo de Filmes</p>
+        </header>
+
+        <!-- Painel Central -->
+        <section class="glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl border border-gray-800/80">
+
+            <!-- Abas de Navegação -->
+            <nav class="flex border-b border-gray-800 mb-6" aria-label="Abas de Acesso">
+                <button type="button" id="tab-login"
+                    class="w-1/2 pb-3 font-semibold text-sm text-center border-b-2 border-red-600 text-red-500 transition-all focus:outline-none">Entrar na Conta</button>
+                <button type="button" id="tab-register"
+                    class="w-1/2 pb-3 font-semibold text-sm text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200 transition-all focus:outline-none">Criar Nova Conta</button>
+            </nav>
+
+            <!-- Alertas Globais -->
+            <div id="auth-alert" class="hidden mb-6 p-4 rounded-xl border bg-red-500/10 border-red-500/20 text-red-400 flex items-start gap-3">
+                <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span id="auth-alert-message" class="font-medium leading-snug"></span>
+            </div>
+
+            <!-- Formulário de Login -->
+            <form id="form-login" class="space-y-4" novalidate>
+                <div>
+                    <label for="login-email" class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">E-mail</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207">
+                                </path>
+                            </svg>
+                        </div>
+                        <input type="email" id="login-email" name="email"
+                            class="w-full bg-gray-900/50 border border-gray-700 rounded-xl pl-10 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-sm"
+                            placeholder="seu@email.com" required>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="login-password" class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Senha</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                                </path>
+                            </svg>
+                        </div>
+                        <input type="password" id="login-password" name="password"
+                            class="w-full bg-gray-900/50 border border-gray-700 rounded-xl pl-10 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-sm"
+                            placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-red-600/20 transition-all active:scale-[0.98] mt-2">
+                    Entrar
+                </button>
+            </form>
+
+            <!-- Formulário de Registro (Corrigido e Completo) -->
+            <form id="form-register" class="space-y-4 hidden" novalidate>
+                <div>
+                    <label for="reg-nome" class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Nome Completo</label>
+                    <input type="text" id="reg-nome" required placeholder="Ex: Carlos Silva"
+                        class="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm transition-all">
+                </div>
+
+                <div>
+                    <label for="reg-email" class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">E-mail</label>
+                    <input type="email" id="reg-email" required placeholder="seu@email.com"
+                        class="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm transition-all">
+                </div>
+
+                <div>
+                    <label for="reg-senha" class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Senha (mínimo 6 caracteres)</label>
+                    <input type="password" id="reg-senha" required placeholder="••••••••" 
+                        class="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm transition-all">
+                </div>
+
+                <div>
+                    <label for="reg-confirm-senha" class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Confirme sua Senha</label>
+                    <input type="password" id="reg-confirm-senha" required placeholder="••••••••" 
+                        class="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm transition-all">
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-brand-600/20 transition-all active:scale-[0.98] mt-4">
+                    Criar Conta
+                </button>
+            </form>
+
+        </section>
+    </main>
+
+</body>
+</html>
